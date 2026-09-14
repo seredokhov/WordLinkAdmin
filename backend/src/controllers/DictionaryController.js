@@ -209,3 +209,43 @@ export const saveDictionaryProgress = async (req, res) => {
         });
     }
 };
+
+export const resetDictionaryProgress = async (req, res) => {
+    try {
+        const { userId, dictionaryId } = req.params;
+
+        if (!assertUserAccess(req, res, userId)) {
+            return;
+        }
+
+        const dictionary = await DictionaryModel.findById(dictionaryId);
+
+        if (!dictionary) {
+            return res.status(404).json({
+                message: 'Dictionary not found'
+            });
+        }
+
+        await UserDictionaryModel.findOneAndDelete({
+            userId,
+            dictionaryId
+        });
+
+        const dictionaryWordsCount = await DictionaryWordModel.countDocuments({
+            dictionaryId
+        });
+
+        res.json({
+            userId,
+            dictionaryId,
+            dictionaryTitle: dictionary.title,
+            dictionaryTheme: dictionary.theme || dictionary.title,
+            totalWords: dictionaryWordsCount,
+            ...defaultDictionaryProgress()
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: 'Cant reset dictionary progress'
+        });
+    }
+};

@@ -3,7 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import config from './../config.js';
 
-import { loginValidator, registrationValidator } from './validations/index.js';
+import { loginValidator, registrationValidator } from './validations';
 import { checkAuth, checkAdmin, handleErrors } from './middlewares/index.js';
 import { UserController, WordController, AdminController, DictionaryController } from './controllers/index.js';
 
@@ -50,6 +50,7 @@ app.get('/dictionaries', checkAuth, DictionaryController.getDictionaries);
 app.get('/dictionaries/:id/words', checkAuth, DictionaryController.getDictionaryWords);
 app.get('/users/:userId/dictionaries/:dictionaryId/progress', checkAuth, DictionaryController.getDictionaryProgress);
 app.put('/users/:userId/dictionaries/:dictionaryId/progress', checkAuth, DictionaryController.saveDictionaryProgress);
+app.delete('/users/:userId/dictionaries/:dictionaryId/progress', checkAuth, DictionaryController.resetDictionaryProgress);
 
 app.listen(config.port, err => {
     if (err) {
