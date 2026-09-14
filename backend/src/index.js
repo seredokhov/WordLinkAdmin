@@ -3,7 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import config from './../config.js';
 
-import { loginValidator, registrationValidator } from './validations';
+import { loginValidator, registrationValidator } from './validations/index.js';
 import { checkAuth, checkAdmin, handleErrors } from './middlewares/index.js';
 import { UserController, WordController, AdminController, DictionaryController } from './controllers/index.js';
 
